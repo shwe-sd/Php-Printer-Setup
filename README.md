@@ -8,9 +8,9 @@ The PHP Printer Service allows you to easily set up a local PHP-based printer se
 
 To use the PHP Printer Service, follow these installation steps:
 
-1. **Download PHP**: First, download the PHP 8.0.30 Non-Thread Safe (NTS) for Windows x64 package from the [official PHP downloads page](https://windows.php.net/download/) or use the php-8.0.30-nts-Win32-vs16-x64 folder.
+1. **Download PHP**: First, Use the php-8.0.30-nts-Win32-vs16-x64 folder.
 
-2. **Install PHP**: Extract the downloaded PHP package to a directory, e.g `C:\Program Files\php-8.0.30-nts-Win32-vs16-x64`.
+2. **Install PHP**: Extract the downloaded PHP package (php-8.0.30-nts-Win32-vs16-x64 folder) to a directory, e.g `C:\Program Files\php-8.0.30-nts-Win32-vs16-x64`.
 
 3. **Set Environmental Variable**: Add an environmental variable for the `PATH` that includes the PHP directory:
 
@@ -42,4 +42,6 @@ Now that you have PHP installed and the environmental variable set, you can run 
 3. Start a local PHP web server by running the following command:
 
    ```bash
+   cd example
+   cd interface
    php -S localhost:8080
