@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($data === null) {
         echo json_encode(['error' => 'Invalid JSON data']);
     } else {
-        echo json_encode(['message' => 'Request received successfully', 'data' => $data]);
+        echo json_encode(['message' => 'Request received successfully']);
         // $jsonData = '[
         //     {
         //         "type": "text",
@@ -105,7 +105,7 @@ function listingTable($jsonTable) {
     
     $retList = $table->render();
     
-    print_r($retList);
+    // print_r($retList);
     return $retList;
 }
 
@@ -134,7 +134,7 @@ function listingTable2($jsonTable) {
     
     $retList = $table->render();
     
-    print_r($retList);
+    // print_r($retList);
     return $retList;
 }
 
@@ -170,43 +170,44 @@ function sendCommandsToPrinter($json) {
             return;
         }
 
-        $connector = new WindowsPrintConnector("SDEpsonT88IV");
-        $printer = new Printer($connector);
-        $logo = EscposImage::load(__DIR__ . "/casio-logo-top.png");
-        $printer -> graphics($logo);
+        //// $connector = new WindowsPrintConnector("SDEpsonT88IV");
+        //// $printer = new Printer($connector);
+        //// $logo = EscposImage::load(__DIR__ . "/casio-logo-top.png");
+        //// $printer -> graphics($logo);
+        $printer = new CustomPrinter();
         foreach ($data as $item) {
             $type = '';
             $toPrint = '';
             if(gettype($item) === 'string') {
                 $type = 'text';
-                $alignment = Printer::JUSTIFY_LEFT;
+                // $alignment = Printer::JUSTIFY_LEFT;
                 $toPrint = $item;
             } else {
                 if(array_key_exists('text', $item)) {
                     $type = 'text';
                 } else if(array_key_exists('canvas', $item)) {
                     $type = 'line';
-                    $alignment = Printer::JUSTIFY_CENTER;
+                    // $alignment = Printer::JUSTIFY_CENTER;
                 }
 
-                echo 'something ' . $item;
-                print_r($item);
+                // echo 'something ' . $item;
+                // print_r($item);
 
                 if(array_key_exists('alignment', $item) && $type == 'text') {
-                    $alignment = $type === 'text' ? (
-                        $item['alignment'] === 'center' ? Printer::JUSTIFY_CENTER :
-                        ($item['alignment'] === 'left' ? Printer::JUSTIFY_LEFT : Printer::JUSTIFY_RIGHT)
-                    ) : Printer::JUSTIFY_LEFT; // Default alignment for non-text types
+                    // $alignment = $type === 'text' ? (
+                    //     $item['alignment'] === 'center' ? Printer::JUSTIFY_CENTER :
+                    //     ($item['alignment'] === 'left' ? Printer::JUSTIFY_LEFT : Printer::JUSTIFY_RIGHT)
+                    // ) : Printer::JUSTIFY_LEFT; // Default alignment for non-text types
                 } else if(array_key_exists('columns', $item)) {
                     $type = 'tab-2';
-                    $alignment = Printer::JUSTIFY_CENTER;
+                    // $alignment = Printer::JUSTIFY_CENTER;
                 }
             }
 
             
             
 
-            $printer->setJustification($alignment);
+            // $printer->setJustification($alignment);
 
             if ($type === 'text') {
                 if(gettype($item) === 'string') {
@@ -240,6 +241,8 @@ function sendCommandsToPrinter($json) {
                         $printer->text($item);
                     }
                 } elseif ($row[0]['width'] == '*') {
+                    // echo 'review code';
+                    // print_r($row);
                     $value1 = $row[0]['text'] ?? ''; // Replace null with ''
                     $value2 = $row[1]['text'] ?? ''; // Replace null with ''
                     $preJson = [[$value1, $value2]];
@@ -326,61 +329,25 @@ class item
     }
 }
 
-// [{"canvas":[
-//     {"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,4]},
-//     {"text":"G-SHOCK CASIO\n200 Victoria Street #01-11\nBugis Junction S188021\nTel: 6808 1703\nCompany Reg. No. : 197200980M","alignment":"center"},
-//     {"alignment":"center"},
-//     {"text":"","margin":[0,6]},
-//     {"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,6]},
-//     "Sales No : SAL-001202311070009",
-//     "Status : Paid",
-//     "Register : POS01",
-//     "Date : 2023-11-07 10:32:23",
-//     "User : Chong Wei Ting",
-//     {"columns":[
-//         {"width":30,"text":"Qty"},
-//         {"width":"*","text":"Items"},
-//         {"width":"auto","text":"Amount"}],"columnGap":5},
-//     {"text":"","margin":[0,4]},
-//     {"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,2]},
-//     {"columns":[{"width":30,"text":2},{"width":"*","text":"EX-FR100BKEKB @629.00\nActive Selfie Series (Black)"},{"width":"auto","text":"$1258.00","alignment":"bottom"}],"columnGap":5},
-//     {"columns":[{"width":30,"text":-1},{"width":"*","text":"EX-FR10GNSETFKA @449.00\nActive Selfie Series (Green)"},{"width":"auto","text":"$-449.00","alignment":"bottom"}],"columnGap":5},
-//     {"columns":[{"width":30,"text":-1},{"width":"*","text":"EX-FR100BKEKB @629.00\nActive Selfie Series (Black)"},{"width":"auto","text":"$-629.00","alignment":"bottom"}],"columnGap":5},
-//     {"columns":[{"width":30,"text":1},{"width":"*","text":"EX-FR10GNSETFKA @449.00\nActive Selfie Series (Green)"},{"width":"auto","text":"$449.00","alignment":"bottom"}],"columnGap":5},
-//     {"text":"","margin":[0,4]},
-//     {"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,2]},
-//     {"columns":[{"width":"*","text":"Sub Total: "},{"width":"auto","text":"$1707.00"}],"columnGap":5},
-//     {"columns":[{"width":"*","text":"GST 8% (Incl.)"},{"width":"auto","text":"$126.45"}],"columnGap":5},"",
-//     {"columns":[{"width":"*","text":"Total: "},{"width":"auto","text":"$629.00"}],"columnGap":5},
-//     {"columns":[{"width":"*","text":"Received Amount: "},{"width":"auto","text":"$629.00"}],"columnGap":5},
-//     {"columns":[{"width":"*","text":"Change Amount: "},{"width":"auto","text":"$0.00"}],"columnGap":5},
-//     {"text":"","margin":[0,4]},
-//     {"text":"CONSUMER PROTECTION TEXT MOD","alignment":"center"},
-//     {"text":"","margin":[0,4]},
-//     {"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},{"text":"","margin":[0,2]},{"text":"CONSUMER PROTECTION TEXT","alignment":"center"},{"text":"","margin":[0,2]},{"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},{"text":"","margin":[0,2]}]
+class CustomPrinter {
+    public function setJustification($alignment) {
+        // Your implementation for setJustification goes here
+        // This function might be empty as per the requirement
+    }
 
-// [{"canvas":[
-//     {"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,4]},
-//     {"text":"G-SHOCK CASIO\n200 Victoria Street #01-11\nBugis Junction S188021\nTel: 6808 1703\nCompany Reg. No. : 197200980M","alignment":"center"},
-//     {"alignment":"center"},
-//     {"text":"","margin":[0,6]},
-//     {"canvas":[{"type":"line","x1":0,"y1":0,"x2":240,"y2":0,"dash":{"length":5,"space":1}}]},
-//     {"text":"","margin":[0,6]},
-//     "Sales No : SAL-001202311070009",
-//     "Status : Paid",
-//     "Register : POS01",
-//     "Date : 2023-11-07 10:32:23",
-//     "User : Chong Wei Ting",
-//     {"columns":[
-//         {"width":30,"text":"Qty"},
-//         {"width":"*","text":"Items"},
-//         {"width":"auto","text":"Amount"}],"columnGap":5},
-// ]
+    public function text($text) {
+        // Your implementation for text goes here using echo
+        echo $text;
+    }
+
+    public function cut() {
+
+    }
+
+    public function close() {
+
+    }
+}
 ?>
 
 
