@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($data === null) {
         echo json_encode(['error' => 'Invalid JSON data']);
     } else {
-        echo json_encode(['message' => 'Request received successfully', 'data' => $data]);
+        echo json_encode(['message' => 'Request received successfully']);
         // $jsonData = '[
         //     {
         //         "type": "text",
@@ -105,7 +105,7 @@ function listingTable($jsonTable) {
     
     $retList = $table->render();
     
-    print_r($retList);
+    // print_r($retList);
     return $retList;
 }
 
@@ -134,7 +134,7 @@ function listingTable2($jsonTable) {
     
     $retList = $table->render();
     
-    print_r($retList);
+    // print_r($retList);
     return $retList;
 }
 
@@ -189,8 +189,8 @@ function sendCommandsToPrinter($json) {
                     $alignment = Printer::JUSTIFY_CENTER;
                 }
 
-                echo 'something ' . $item;
-                print_r($item);
+                // echo 'something ' . $item;
+                // print_r($item);
 
                 if(array_key_exists('alignment', $item) && $type == 'text') {
                     $alignment = $type === 'text' ? (
@@ -211,14 +211,17 @@ function sendCommandsToPrinter($json) {
             if ($type === 'text') {
                 if(gettype($item) === 'string') {
                     $printer->text($item . "\n");
+                    echo $item . "\n";
                 } else {
                     if($item['text'] != '') {
                         $printer->text($item['text'] . "\n");
+                        echo $item['text'] . "\n";
                     }
                 }
                 // $printer->text(gettype($item) === 'string'? 'what is that': $item['text'] . "\n");
             } elseif ($type === 'line') {
                 $printer->text("------------------------------------------\n");
+                echo "------------------------------------------\n";
             } elseif ($type === 'tab-2') {
                 $row = $item['columns'];
                 if($row[0]['text'] == 'Qty') {
@@ -238,6 +241,7 @@ function sendCommandsToPrinter($json) {
                     $dataRows = listingTable($preJson);
                     foreach ($dataRows as $item) {
                         $printer->text($item);
+                        echo $item;
                     }
                 } elseif ($row[0]['width'] == '*') {
                     $value1 = $row[0]['text'] ?? ''; // Replace null with ''
@@ -246,6 +250,7 @@ function sendCommandsToPrinter($json) {
                     $dataRows = listingTable2($preJson);
                     foreach ($dataRows as $item) {
                         $printer->text($item);
+                        echo $item;
                     }
                 } else {
                     // $left = $row[0]['text'] . 'x ' . $row[1]['text'];
@@ -264,6 +269,7 @@ function sendCommandsToPrinter($json) {
                     $dataRows = listingTable($preJson);
                     foreach ($dataRows as $item) {
                         $printer->text($item);
+                        echo $item;
                     }
                 }
                 
