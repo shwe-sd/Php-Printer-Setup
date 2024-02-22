@@ -39,7 +39,7 @@ Now that you have PHP installed and the environmental variable set, you can run 
 
 2. Open a command prompt or terminal and navigate to the directory where you extracted the `escpos-php-development` project.
 
-3. Start a local PHP web server by running the following command: (Suppose you are running following command in this directory escpos-php-development)
+3. Start a local PHP web server by running the following command: (Suppose you are running following command in this directory `escpos-php-development`)
 
    ```bash
    cd example
